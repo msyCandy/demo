@@ -59,7 +59,7 @@ public class ApiController {
     public String mark(String account, String password, String info) throws IOException {
         BigInteger nonce = getNonce(web3j, account);
         unlockAccount(account, password);
-        String hash = web3j.ethSendTransaction(Transaction.createFunctionCallTransaction(account, nonce, new BigInteger("0"), null, account, new BigInteger("0"), info)).send().getTransactionHash();
+        String hash = web3j.ethSendTransaction(Transaction.createFunctionCallTransaction(account, nonce, new BigInteger("0"), null, account, new BigInteger("0"), "0x"+MyUtils.hexStringToString(info))).send().getTransactionHash();
         log.info("记录信息【{}】，账号【{}】，交易记录hash【{}】", info, account, hash);
         return hash;
     }
