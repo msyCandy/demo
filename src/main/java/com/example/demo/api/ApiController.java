@@ -59,7 +59,7 @@ public class ApiController {
     public String mark(String account, String password, String info) throws IOException {
         BigInteger nonce = getNonce(web3j, account);
         unlockAccount(account, password);
-        String hash = web3j.ethSendTransaction(Transaction.createFunctionCallTransaction(account, nonce, new BigInteger("0"), null, account, new BigInteger("0"), "0x"+MyUtils.strTo16(info))).send().getTransactionHash();
+        String hash = web3j.ethSendTransaction(Transaction.createFunctionCallTransaction(account, nonce, new BigInteger("0"), null, account, new BigInteger("0"), "0x" + MyUtils.strTo16(info))).send().getTransactionHash();
         log.info("记录信息【{}】，账号【{}】，交易记录hash【{}】", info, account, hash);
         return hash;
     }
@@ -68,7 +68,11 @@ public class ApiController {
     @PostMapping("/get")
     public String getTransaction(String hash) throws IOException {
         Optional<org.web3j.protocol.core.methods.response.Transaction> transaction = web3j.ethGetTransactionByHash(hash).send().getTransaction();
-        return MyUtils.hexStringToString(transaction.get().getInput());
+        String input = transaction.get().getInput();
+        if (input.startsWith("0x")) {
+            input = input.substring(2);
+        }
+        return MyUtils.hexStringToString(input);
     }
 
 
